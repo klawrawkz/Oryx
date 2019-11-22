@@ -7,9 +7,6 @@ inputs:
   source-directory:
     description: 'Relative path (within the repository) to the source directory of the project you want to create a Dockerfile for; if no value is provided for this, the root of the repository ("GITHUB_WORKSPACE" environment variable) will be used.'
     required: false
-  dockerfile-path:
-    description: 'Path to the Dockerfile that will be written to; if no value is provided, the Dockerfile will be written to a Dockerfile.oryx file in the source directory.'
-    required: false
   platform:
     description: 'Programming platform of the web app; if no value is provided, Oryx will determine the platform to build with. The supported values are "dotnet", "nodejs", "php" and "python".'
     required: false
@@ -24,6 +21,5 @@ runs:
   image: 'Dockerfile'
   args:
     - ${{ inputs.source-directory }}
-    - ${{ inputs.dockerfile-path }}
     - ${{ inputs.platform }}
     - ${{ inputs.platformVersion }}

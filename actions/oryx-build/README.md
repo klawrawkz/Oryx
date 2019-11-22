@@ -12,8 +12,6 @@ The following parameters can be set as a part of the action:
 
 - `source-directory`
     - Relative path (within the repository) to the source directory of the project you want to build; if no value is provided for this, the root of the repository ('GITHUB_WORKSPACE' environment variable) will be built.
-- `output-directory`
-    - Path to the directory on the container that the build artifacts will be placed; if no value is provided, the given platform will determine where the build artifacts are placed within the repository.
 - `platform`
     - Programming platform used to build the web app; if no value is provided, Oryx will determine the platform to build with. The supported values are "dotnet", "nodejs", "php" and "python".
 - `platform-version`
@@ -57,7 +55,7 @@ jobs:
         uses: microsoft/oryx/actions/oryx-build@master
 
       - name: Deploying web app to Azure
-        uses: azure/appservice-actions/webapp@master
+        uses: azure/webapps-deploy@v1
         with:
           app-name: <WEB_APP_NAME>
           publish-profile: ${{ secrets.AZURE_WEB_APP_PUBLISH_PROFILE }}
@@ -71,4 +69,4 @@ The following variable should be replaced in your workflow:
 The following variable should be set in the GitHub repository's secrets store:
 
 - `AZURE_WEB_APP_PUBLISH_PROFILE`
-    - The contents of the publish profile file (`.publishsettings`) used to deploy the web app; for more information on setting this secret, please see the [`azure/appservice-actions/webapp`](https://github.com/Azure/appservice-actions) action
+    - The contents of the publish profile file (`.publishsettings`) used to deploy the web app; for more information on setting this secret, please see the [`azure/webapps-deploy`](https://github.com/Azure/webapps-deploy) action

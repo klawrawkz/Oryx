@@ -1,9 +1,8 @@
 #!/bin/sh -l
 
 sourceDirectory=$1
-outputDirectory=$2
-platform=$3
-platformVersion=$4
+platform=$2
+platformVersion=$3
 
 echo
 
@@ -18,14 +17,6 @@ fi
 
 echo
 oryxCommand="oryx build ${sourceDirectory}"
-
-if [ -n "${outputDirectory}" ]
-then
-    oryxCommand="${oryxCommand} --output ${outputDirectory}"
-    echo "Output directory provided -- the build artifacts will be written to the following directory: '${outputDirectory}'"
-else
-    echo "No output directory provided -- the given platform will determine where the build artifacts are placed within the repository."
-fi
 
 echo
 

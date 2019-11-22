@@ -37,8 +37,6 @@ The following parameters can be set as a part of the action:
 
 - `source-directory`
     - Source directory of the repository; if no value is provided for this, the current working directory in the container is set as the source directory
-- `dockerfile-path`
-    - Path to the Dockerfile that will be written to; if no value is provided for this, the result will be written to a `Dockerfile.oryx` file in the source directory
 - `platform`
     - Programming platform used to build the web app; if no value is provided for this, Oryx will detect the platform. The supported values are "dotnet", "nodejs", "php" and "python"
 - `platform-version`
@@ -181,7 +179,7 @@ jobs:
           docker push <REGISTRY_NAME>/<IMAGE_NAME>:<TAG>
 
       - name: Deploying container web app to Azure
-        uses: azure/appservice-actions/webapp-container@master
+        uses: azure/webapps-container-deploy@v1
         with:
           app-name: <WEB_APP_NAME>
           images: <REGISTRY_NAME>/<IMAGE_NAME>:<TAG>

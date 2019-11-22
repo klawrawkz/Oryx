@@ -1,9 +1,8 @@
 #!/bin/sh -l
 
 sourceDirectory=$1
-dockerfilePath=$2
-platform=$3
-platformVersion=$4
+platform=$2
+platformVersion=$3
 
 echo
 
@@ -16,19 +15,8 @@ else
     echo "No source directory provided -- the root of the repository ('GITHUB_WORKSPACE' environment variable) will be built: '${sourceDirectory}'"
 fi
 
-oryxCommand="oryx dockerfile ${sourceDirectory}"
-
-echo
-
-if [ -n "${dockerfilePath}" ]
-then
-    echo "Output Dockerfile provided -- the generated Dockerfile will be written to the following file: '${dockerfilePath}'"
-else
-    dockerfilePath="${sourceDirectory}/Dockerfile.oryx"
-    echo "No output Dockerfile provided -- the generated Dockerfile will be written to the following file: '${dockerfilePath}'"
-fi
-
-oryxCommand="${oryxCommand} --output ${dockerfilePath}"
+dockerfilePath="${sourceDirectory}/Dockerfile.oryx"
+oryxCommand="oryx dockerfile ${sourceDirectory} --output ${dockerfilePath}"
 
 echo
 
