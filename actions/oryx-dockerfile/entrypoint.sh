@@ -3,11 +3,13 @@
 sourceDirectory=$1
 platform=$2
 platformVersion=$3
+dockerfilePath="Dockerfile.oryx"
 
 echo
 
 if [ -n "${sourceDirectory}" ]
 then
+    dockerfilePath="$sourceDirectory/$dockerfilePath"
     sourceDirectory="$PWD/$sourceDirectory"
     echo "Relative path to source directory provided -- the following directory will be built: '${sourceDirectory}'"
 else
@@ -15,9 +17,10 @@ else
     echo "No source directory provided -- the root of the repository ('GITHUB_WORKSPACE' environment variable) will be built: '${sourceDirectory}'"
 fi
 
-dockerfilePath="${sourceDirectory}/Dockerfile.oryx"
-oryxCommand="oryx dockerfile ${sourceDirectory} --output ${dockerfilePath}"
+oryxCommand="oryx dockerfile ${sourceDirectory} --output ${sourceDirectory}/${dockerfilePath}"
 
+echo
+echo "Dockerfile will be written to the following file: '${dockerfilePath}'"
 echo
 
 if [ -n "${platform}" ]
