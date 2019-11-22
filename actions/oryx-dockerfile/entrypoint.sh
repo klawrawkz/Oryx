@@ -17,7 +17,7 @@ else
     echo "No source directory provided -- the root of the repository ('GITHUB_WORKSPACE' environment variable) will be built: '${sourceDirectory}'"
 fi
 
-oryxCommand="oryx dockerfile ${sourceDirectory} --output ${sourceDirectory}/${dockerfilePath}"
+oryxCommand="oryx dockerfile ${sourceDirectory} --output ${dockerfilePath}"
 
 echo
 echo "Dockerfile will be written to the following file: '${dockerfilePath}'"
