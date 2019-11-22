@@ -1,7 +1,5 @@
 #!/bin/sh -l
 
-set -ex
-
 sourceDirectory=$1
 platform=$2
 platformVersion=$3
