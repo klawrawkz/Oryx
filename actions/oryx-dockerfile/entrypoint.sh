@@ -1,9 +1,12 @@
 #!/bin/sh -l
 
+set -ex
+
 sourceDirectory=$1
 platform=$2
 platformVersion=$3
 dockerfilePath="Dockerfile.oryx"
+
 
 echo
 
@@ -43,9 +46,8 @@ fi
 
 echo
 echo "Running command '${oryxCommand}'"
-eval $oryxCommand
-
 echo
+eval $oryxCommand
 
 if [ -f "$dockerfilePath" ];
 then
@@ -56,4 +58,5 @@ else
     exit 1
 fi
 
+echo
 echo ::set-output name=dockerfile-path::$dockerfilePath
