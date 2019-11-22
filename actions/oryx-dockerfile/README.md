@@ -67,7 +67,7 @@ jobs:
         id: oryx
 
       - name: Azure authentication
-        uses: azure/actions/login@v1
+        uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -112,7 +112,7 @@ jobs:
         id: oryx
 
       - name: Logging into registry
-        uses: azure/container-actions/docker-login@master
+        uses: azure/docker-login@master
         with:
           login-server: <REGISTRY_NAME>
           username: ${{ secrets.REGISTRY_USERNAME }}
@@ -162,12 +162,12 @@ jobs:
         id: oryx
 
       - name: Logging into Azure
-        uses: azure/actions/login@master
+        uses: azure/login@master
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Logging into registry
-        uses: azure/container-actions/docker-login@master
+        uses: azure/docker-login@master
         with:
           login-server: <REGISTRY_NAME>
           username: ${{ secrets.REGISTRY_USERNAME }}
