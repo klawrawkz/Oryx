@@ -45,4 +45,15 @@ echo
 echo "Running command '${oryxCommand}'"
 eval $oryxCommand
 
+echo
+
+if [ -f "$dockerfilePath" ];
+then
+    echo "Dockerfile generation succeeded; the following is the content of the Dockerfile:"
+    cat $dockerfilePath
+else
+    echo "Dockerfile generation failed."
+    exit 1
+fi
+
 echo ::set-output name=dockerfile-path::$dockerfilePath
