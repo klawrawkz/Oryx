@@ -22,4 +22,4 @@ runs:
   args:
     - ${{ inputs.source-directory }}
     - ${{ inputs.platform }}
-    - ${{ inputs.platformVersion }}
+    - ${{ inputs.platform-version }}
