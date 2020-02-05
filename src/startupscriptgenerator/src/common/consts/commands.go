@@ -3,10 +3,7 @@
 // Licensed under the MIT license.
 // --------------------------------------------------------------------------------------------
 
-namespace Microsoft.Oryx.BuildScriptGenerator.Python
-{
-    public class PythonScriptGeneratorOptions
-    {
-        public string PythonDefaultVersion { get; set; }
-    }
-}
+package consts
+
+const SetupEnvCommandName string = "setupEnv"
+const ScriptCommandName string = "script"

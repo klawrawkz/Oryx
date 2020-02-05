@@ -5,7 +5,7 @@
 
 namespace Microsoft.Oryx.BuildScriptGenerator.Python
 {
-    internal static class ManifestFilePropertyKeys
+    internal static class PythonManifestFilePropertyKeys
     {
         internal const string CompressedVirtualEnvFile = "compressedVirtualEnvFile";
         internal const string VirtualEnvName = "virtualEnvName";
