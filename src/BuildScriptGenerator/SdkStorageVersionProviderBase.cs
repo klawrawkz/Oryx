@@ -28,8 +28,8 @@ namespace Microsoft.Oryx.BuildScriptGenerator
             string platformName,
             string versionMetadataElementName)
         {
-            var httpClient = _httpClientFactory.CreateClient();
-            
+            var httpClient = _httpClientFactory.CreateClient("general");
+
             var sdkStorageBaseUrl = GetPlatformBinariesStorageBaseUrl();
             var blobList = httpClient
                 .GetStringAsync($"{sdkStorageBaseUrl}/{platformName}?restype=container&comp=list&include=metadata")
