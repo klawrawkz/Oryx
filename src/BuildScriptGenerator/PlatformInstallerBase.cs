@@ -49,7 +49,9 @@ namespace Microsoft.Oryx.BuildScriptGenerator
                 .AppendLine($"rm -rf {versionDirInTemp}")
                 .AppendLine($"mkdir -p {versionDirInTemp}")
                 .AppendLine($"cd {versionDirInTemp}")
-                .AppendLine($"curl -D headers.txt -SL \"{sdkStorageBaseUrl}/{platformName}/{platformName}-{version}.tar.gz\" --output {tarFile} >/dev/null 2>&1")
+                .AppendLine(
+                $"curl -D headers.txt -SL \"{sdkStorageBaseUrl}/{platformName}/{platformName}-{version}.tar.gz\"" +
+                $"--output {tarFile} >/dev/null 2>&1")
                 .AppendLine("headerName=\"x-ms-meta-checksum\"")
                 .AppendLine("checksumHeader=$(cat headers.txt | grep $headerName: | tr -d '\r')")
                 .AppendLine("rm -f headers.txt")

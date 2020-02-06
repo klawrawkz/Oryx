@@ -16,18 +16,20 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Tests.Python
     public class PythonPlatformTests
     {
         [Fact]
-        public void GeneratedSnippet_DoesNotHaveInstallationScript_IfLatestVersionIsNotOptedIn()
+        public void GeneratedSnippet_DoesNotHaveInstallScript_IfDynamicInstallIsDisabled_AndUseLatestVersionIsTrue()
         {
             // Arrange
+            var options = new BuildScriptGeneratorOptions() { EnableDynamicInstall = false };
             var environment = new TestEnvironment();
+            environment.Variables[SdkStorageConstants.UseLatestVersion] = "true";
             var installerScriptSnippet = "##INSTALLER_SCRIPT##";
             var versionProvider = new TestPythonVersionProvider(new[] { "3.7.5", "3.8.0" }, defaultVersion: "3.7.5");
             var platformInstaller = new TestPythonPlatformInstaller(
                 isVersionAlreadyInstalled: false,
                 installerScript: installerScriptSnippet,
-                Options.Create(new BuildScriptGeneratorOptions()),
+                Options.Create(options),
                 environment);
-            var platform = CreatePlatform(environment, versionProvider, platformInstaller);
+            var platform = CreatePlatform(environment, versionProvider, platformInstaller, options);
             var repo = new MemorySourceRepo();
             repo.AddFile("", PythonConstants.RequirementsFileName);
             repo.AddFile("print(1)", "bla.py");
@@ -44,9 +46,39 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Tests.Python
         }
 
         [Fact]
-        public void GeneratedSnippet_HasInstallationScript_IfLatestVersionIsOptedIn()
+        public void GeneratedSnippet_DoesNotHaveInstallScript_IfDynamicInstallIsEnabled_AndUseLatestVersionIsFalse()
         {
             // Arrange
+            var options = new BuildScriptGeneratorOptions() { EnableDynamicInstall = false };
+            var environment = new TestEnvironment();
+            var installerScriptSnippet = "##INSTALLER_SCRIPT##";
+            var versionProvider = new TestPythonVersionProvider(new[] { "3.7.5", "3.8.0" }, defaultVersion: "3.7.5");
+            var platformInstaller = new TestPythonPlatformInstaller(
+                isVersionAlreadyInstalled: false,
+                installerScript: installerScriptSnippet,
+                Options.Create(options),
+                environment);
+            var platform = CreatePlatform(environment, versionProvider, platformInstaller, options);
+            var repo = new MemorySourceRepo();
+            repo.AddFile("", PythonConstants.RequirementsFileName);
+            repo.AddFile("print(1)", "bla.py");
+            var context = new BuildScriptGeneratorContext { SourceRepo = repo, PythonVersion = "3.7.5" };
+
+            // Act
+            var snippet = platform.GenerateBashBuildScriptSnippet(context);
+
+            // Assert
+            Assert.NotNull(snippet);
+            Assert.Null(snippet.InstallationScriptSnippet);
+            Assert.Contains(ManifestFilePropertyKeys.PythonVersion, snippet.BuildProperties.Keys);
+            Assert.Equal("3.7.5", snippet.BuildProperties[ManifestFilePropertyKeys.PythonVersion]);
+        }
+
+        [Fact]
+        public void GeneratedSnippet_HasInstallationScript_IfDynamicInstallIsEnabled_AndLatestVersionIsTrue()
+        {
+            // Arrange
+            var options = new BuildScriptGeneratorOptions() { EnableDynamicInstall = true };
             var environment = new TestEnvironment();
             environment.Variables[SdkStorageConstants.UseLatestVersion] = "true";
             var installerScriptSnippet = "##INSTALLER_SCRIPT##";
@@ -54,9 +86,9 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Tests.Python
             var platformInstaller = new TestPythonPlatformInstaller(
                 isVersionAlreadyInstalled: false,
                 installerScript: installerScriptSnippet,
-                Options.Create(new BuildScriptGeneratorOptions()),
+                Options.Create(options),
                 environment);
-            var platform = CreatePlatform(environment, versionProvider, platformInstaller);
+            var platform = CreatePlatform(environment, versionProvider, platformInstaller, options);
             var repo = new MemorySourceRepo();
             repo.AddFile("", PythonConstants.RequirementsFileName);
             repo.AddFile("print(1)", "bla.py");
@@ -74,9 +106,10 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Tests.Python
         }
 
         [Fact]
-        public void GeneratedSnippet_DoesNotHaveInstallationScript_IfVersionIsAlreadyPresentOnDisk()
+        public void GeneratedSnippet_DoesNotHaveInstallScript_IfVersionIsAlreadyPresentOnDisk()
         {
             // Arrange
+            var options = new BuildScriptGeneratorOptions() { EnableDynamicInstall = true };
             var environment = new TestEnvironment();
             environment.Variables[SdkStorageConstants.UseLatestVersion] = "true";
             var installerScriptSnippet = "##INSTALLER_SCRIPT##";
@@ -84,9 +117,9 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Tests.Python
             var platformInstaller = new TestPythonPlatformInstaller(
                 isVersionAlreadyInstalled: true,
                 installerScript: installerScriptSnippet,
-                Options.Create(new BuildScriptGeneratorOptions()),
+                Options.Create(options),
                 environment);
-            var platform = CreatePlatform(environment, versionProvider, platformInstaller);
+            var platform = CreatePlatform(environment, versionProvider, platformInstaller, options);
             var repo = new MemorySourceRepo();
             repo.AddFile("", PythonConstants.RequirementsFileName);
             repo.AddFile("print(1)", "bla.py");
@@ -155,9 +188,10 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Tests.Python
         private PythonPlatform CreatePlatform(
             IEnvironment environment,
             IPythonVersionProvider pythonVersionProvider,
-            PythonPlatformInstaller platformInstaller)
+            PythonPlatformInstaller platformInstaller,
+            BuildScriptGeneratorOptions options)
         {
-            var commonOptions = Options.Create(new BuildScriptGeneratorOptions());
+            var commonOptions = Options.Create(options);
 
             return new PythonPlatform(
                 commonOptions,

@@ -4,6 +4,7 @@
 // --------------------------------------------------------------------------------------------
 
 using System;
+using System.Net.Http.Headers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -28,7 +29,11 @@ namespace Microsoft.Oryx.BuildScriptGenerator
             services.AddSingleton<IScriptExecutor, DefaultScriptExecutor>();
             services.AddSingleton<IEnvironmentSettingsProvider, DefaultEnvironmentSettingsProvider>();
             services.AddSingleton<IRunScriptGenerator, DefaultRunScriptGenerator>();
-            services.AddHttpClient();
+            services.AddHttpClient("general", httpClient =>
+            {
+                // NOTE: Setting user agent is required to avoid receiving 403 Forbidden response.
+                httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("oryx", "1.0"));
+            });
 
             // Add all checkers (platform-dependent + platform-independent)
             foreach (Type type in typeof(BuildScriptGeneratorServiceCollectionExtensions).Assembly.GetTypes())

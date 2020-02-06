@@ -29,9 +29,7 @@ namespace Microsoft.Oryx.BuildScriptGenerator
             string versionMetadataElementName)
         {
             var httpClient = _httpClientFactory.CreateClient();
-            // NOTE: Setting user agent is required to avoid receiving 403 Forbidden response.
-            httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("oryx", "1.0"));
-
+            
             var sdkStorageBaseUrl = GetPlatformBinariesStorageBaseUrl();
             var blobList = httpClient
                 .GetStringAsync($"{sdkStorageBaseUrl}/{platformName}?restype=container&comp=list&include=metadata")
