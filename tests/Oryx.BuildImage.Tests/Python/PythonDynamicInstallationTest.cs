@@ -34,7 +34,7 @@ namespace Microsoft.Oryx.BuildImage.Tests
                 .SetEnvironmentVariable(
                     SdkStorageConstants.SdkStorageBaseUrlKeyName,
                     SdkStorageConstants.DevSdkStorageBaseUrl)
-                .AddBuildCommand($"{appDir} -o {appOutputDir}")
+                .AddBuildCommand($"{appDir} -o {appOutputDir} --enable-dynamic-install")
                 .ToString();
 
             // Act
